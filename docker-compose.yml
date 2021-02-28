@@ -1,19 +1,19 @@
 version: '3'
 services:
-  heimdall:
-    # https://hub.docker.com/r/linuxserver/heimdall/
-    image: ghcr.io/linuxserver/heimdall
-    container_name: heimdall
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
-    volumes:
-      -  './config/heimdall:/config'
-    ports:
-      - 8080:8080
-      - 444:444
-    restart: unless-stopped
+  # heimdall:
+  #   # https://hub.docker.com/r/linuxserver/heimdall/
+  #   image: ghcr.io/linuxserver/heimdall
+  #   container_name: heimdall
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=America/New_York
+  #   volumes:
+  #     -  './config/heimdall:/config'
+  #   ports:
+  #     - 8080:8080
+  #     - 444:444
+  #   restart: unless-stopped
   pihole:
     # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
     container_name: pihole
