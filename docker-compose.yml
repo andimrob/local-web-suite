@@ -1,0 +1,89 @@
+---
+version: "3"
+services:
+  heimdall:
+    # https://hub.docker.com/r/linuxserver/heimdall/
+    image: ghcr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      -  './config/heimdall:/config'
+    ports:
+      - 8080:80
+      - 444:444
+    restart: unless-stopped
+  pihole:
+    # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'America/New_York'
+      # WEBPASSWORD: 'set a secure password here or it will be random'
+    volumes:
+      - pihole_etc:/etc/pihole/
+      - pihole_dns:/etc/dnsmasq.d/
+      # run `touch ./var-log/pihole.log` first unless you like errors
+      - pihole_logs:/var/log/pihole.log'
+      # Recommended but not required (DHCP needs NET_ADMIN)
+      #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+  transmission:
+    # https://hub.docker.com/r/linuxserver/transmission
+    image: ghcr.io/linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+      - TRANSMISSION_WEB_HOME=/combustion-release/ # optional: transmission-web-control, kettu, combustion-release
+      # - USER=username #optional
+      # - PASS=password #optional
+      # - WHITELIST=iplist #optional
+    volumes:
+      - './config/transmission:/config'
+      - "$HOME/downloads:/downloads"
+      - "$HOME/downloads/watch:/watch"
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+  # handbrake:
+  #   # https://github.com/jlesage/docker-handbrake
+  #   image: jlesage/handbrake
+  #   build: .
+  #   ports:
+  #     - 5800:5800
+  #   volumes:
+  #     - "/docker/appdata/handbrake:/config:rw"
+  #     - "$HOME:/storage:ro"
+  #     - "$HOME/Videos/watch:/watch:rw"
+  #     - "$HOME/Videos/output:/output:rw"
+
+volumes:
+  portainer_data:
+  pihole_etc:
+  pihole_dns:
+  pihole_logs:
