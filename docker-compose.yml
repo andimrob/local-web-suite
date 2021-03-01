@@ -63,8 +63,8 @@ services:
       # - WHITELIST=iplist #optional
     volumes:
       - './config/transmission:/config'
-      - '$HOME/downloads:/downloads'
-      - '$HOME/downloads/watch:/watch'
+      - '${$HOME}/downloads:/downloads'
+      - '${$HOME}/downloads/watch:/watch'
     ports:
       - 9091:9091
       - 51413:51413
@@ -78,9 +78,9 @@ services:
       - 5800:5800
     volumes:
       - '/docker/appdata/handbrake:/config:rw'
-      - '${HOME}:/storage:ro'
-      - '${HOME}/Videos/watch:/watch:rw'
-      - '${HOME}/Videos/output:/output:rw'
+      - '${$HOME}:/storage:ro'
+      - '${$HOME}/Videos/watch:/watch:rw'
+      - '${$HOME}/Videos/output:/output:rw'
 
 volumes:
   portainer_data:
