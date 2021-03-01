@@ -57,30 +57,30 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-      - TRANSMISSION_WEB_HOME=/combustion-release/ # optional: transmission-web-control, kettu, combustion-release
+      - TRANSMISSION_WEB_HOME=/transmission-web-control/ # optional: transmission-web-control, kettu, combustion-release
       # - USER=username #optional
       # - PASS=password #optional
       # - WHITELIST=iplist #optional
     volumes:
       - './config/transmission:/config'
-      - '${$HOME}/downloads:/downloads'
-      - '${$HOME}/downloads/watch:/watch'
+      - '$HOME/downloads:/downloads'
+      - '$HOME/downloads/watch:/watch'
     ports:
       - 9091:9091
       - 51413:51413
       - 51413:51413/udp
     restart: unless-stopped
-  handbrake:
-    # https://github.com/jlesage/docker-handbrake
-    image: jlesage/handbrake
-    build: .
-    ports:
-      - 5800:5800
-    volumes:
-      - '/docker/appdata/handbrake:/config:rw'
-      - '${$HOME}:/storage:ro'
-      - '${$HOME}/Videos/watch:/watch:rw'
-      - '${$HOME}/Videos/output:/output:rw'
+  # handbrake:
+  #   # https://github.com/jlesage/docker-handbrake
+  #   image: jlesage/handbrake
+  #   build: .
+  #   ports:
+  #     - 5800:5800
+  #   volumes:
+  #     - '/docker/appdata/handbrake:/config:rw'
+  #     - '$HOME:/storage:ro'
+  #     - '$HOME/Videos/watch:/watch:rw'
+  #     - '$HOME/Videos/output:/output:rw'
 
 volumes:
   portainer_data:
